@@ -25,5 +25,13 @@
 <textarea name="content" rows="10" cols="50">${report.content}</textarea>
 <br/><br/>
 
+<label for="punch_in">出勤時刻</label><br/>
+<input type="time" name="punch_in" value='${report.punch_in}' />
+<br/><br/>
+
+<label for="punch_out">退勤時刻</label><br/>
+<input type="time" name="punch_out" value='${report.punch_out}' />
+<br/><br/>
+
 <input type="hidden" name="_token" value="${_token}" />
 <button type="submit">投稿</button>

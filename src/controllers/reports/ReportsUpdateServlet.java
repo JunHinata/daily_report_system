@@ -2,6 +2,7 @@ package controllers.reports;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -45,6 +46,22 @@ public class ReportsUpdateServlet extends HttpServlet {
             r.setReport_date(Date.valueOf(request.getParameter("report_date")));
             r.setTitle(request.getParameter("title"));
             r.setContent(request.getParameter("content"));
+
+            String pi_str = request.getParameter("punch_in");
+            String po_str = request.getParameter("punch_out");
+            if(pi_str != null && !pi_str.equals("")) {
+                if(pi_str.length() == 5) { // 出勤時刻が入力されていてHH:mmの形式だった場合
+                    pi_str += ":00"; // HH:mm:00の形式に書き換える
+                }
+                r.setPunch_in(Time.valueOf(pi_str));
+            }
+            if(po_str != null && !po_str.equals("")) {
+                if(po_str.length() == 5) { // 退勤時刻が入力されていてHH:mmの形式だった場合
+                    po_str += ":00"; // HH:mm:00の形式に書き換える
+                }
+                r.setPunch_out(Time.valueOf(po_str));
+            }
+
             r.setUpdated_at(new Timestamp(System.currentTimeMillis()));
 
             List<String> errors = ReportValidator.validate(r);
