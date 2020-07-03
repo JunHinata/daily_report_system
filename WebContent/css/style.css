@@ -68,6 +68,7 @@ button {
 
 #footer {
     text-align: center;
+    margin-top: 15px;
 }
 
 #flush_success {
@@ -144,15 +145,15 @@ table#report_list .report_name {
     padding: 10px 2%;
 }
 
-table#report_List .report_date {
+table#report_list .report_date {
     width: 20%;
 }
 
-table#report_List .report_title {
+table#report_list .report_title {
     width: 37%;
 }
 
-table#report_List .report_action {
+table#report_list .report_action {
     width: 13%;
 }
 
@@ -162,4 +163,45 @@ pre {
 
 h3 {
     font-size: larger;
+}
+
+caption {
+    font-size: larger;
+}
+
+table#follow_list {
+    float: left;
+    width: 55%;
+    table-layout: fixed;
+}
+
+table#follower_list {
+    float: right;
+    width: 40%;
+    margin-bottom: 15px;
+    table-layout: fixed;
+}
+
+table#follow_list .follow_name {
+    width: 25%;
+}
+
+table#follow_list .follow_report {
+    width: 14%;
+}
+
+table#follow_list .follow_action {
+    width: 14%;
+}
+
+table#follower_list .follower_name {
+    width: 25%;
+}
+
+table#follower_list .follower_action {
+    width: 14%;
+}
+
+.clear {
+    clear: both;
 }

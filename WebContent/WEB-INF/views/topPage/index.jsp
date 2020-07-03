@@ -43,5 +43,25 @@
             </c:forEach>
         </div>
         <p><a href="<c:url value='/reports/new' />">新規日報の登録</a></p>
+
+        <h3>【フォロー中従業員の日報　最新10件】</h3>
+        <table id="report_list">
+            <tbody>
+                <tr>
+                    <th class="report_name">氏名</th>
+                    <th class="report_date">日付</th>
+                    <th class="report_title">タイトル</th>
+                    <th class="report_action">操作</th>
+                </tr>
+                <c:forEach var="follow_report" items="${follow_reports}" varStatus="status">
+                    <tr class="row${status.count % 2}">
+                        <td class="report_name"><c:out value="${follow_report.employee.name}" /></td>
+                        <td class="report_date"><fmt:formatDate value='${follow_report.report_date}' pattern='yyyy-MM-dd' /></td>
+                        <td class="report_title">${follow_report.title}</td>
+                        <td class="report_action"><a href="<c:url value='/reports/show?id=${follow_report.id}' />">詳細を見る</a></td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
     </c:param>
 </c:import>

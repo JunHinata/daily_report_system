@@ -1,7 +1,6 @@
-package controllers.toppage;
+package controllers.follows;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,22 +12,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
-import models.Follow;
 import models.Report;
-import models.ReportComparator;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class TopPageIndexServlet
+ * Servlet implementation class FollowsShowServlet
  */
-@WebServlet("/index.html")
-public class TopPageIndexServlet extends HttpServlet {
+@WebServlet("/follows/reports")
+public class FollowsReportsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TopPageIndexServlet() {
+    public FollowsReportsServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,8 +36,6 @@ public class TopPageIndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManager em = DBUtil.createEntityManager();
 
-        Employee login_employee = (Employee)request.getSession().getAttribute("login_employee");
-
         int page;
         try {
             page = Integer.parseInt(request.getParameter("page"));
@@ -48,53 +43,34 @@ public class TopPageIndexServlet extends HttpServlet {
         catch(Exception e) {
             page = 1;
         }
+
+        Employee employee = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
+
         List<Report> reports = em.createNamedQuery("getMyAllReports", Report.class)
-                                 .setParameter("employee", login_employee)
+                                 .setParameter("employee", em.find(Employee.class, Integer.parseInt(request.getParameter("id"))))
                                  .setFirstResult(15 * (page - 1))
                                  .setMaxResults(15)
                                  .getResultList();
 
         long reports_count = (long)em.createNamedQuery("getMyReportsCount", Long.class)
-                                     .setParameter("employee", login_employee)
+                                     .setParameter("employee", em.find(Employee.class, Integer.parseInt(request.getParameter("id"))))
                                      .getSingleResult();
-
-        List<Follow> follow_list = new ArrayList<Follow>();
-
-        follow_list = em.createNamedQuery("getMyAllFollows", Follow.class)
-                        .setParameter("id", login_employee)
-                        .getResultList();
-
-        List<Report> follow_reports = new ArrayList<Report>();
-        List<Report> add_reports = new ArrayList<Report>();
-
-        for(int i = 0; i < follow_list.size(); i++) {
-            add_reports = em.createNamedQuery("getMyAllReports", Report.class)
-                            .setParameter("employee", follow_list.get(i).getFollowed())
-                            .getResultList();
-
-            follow_reports.addAll(add_reports);
-        }
-
-        follow_reports.sort(new ReportComparator());
-        if(follow_reports.size() > 10) {
-            follow_reports = follow_reports.subList(0,10);
-        }
 
         em.close();
 
+        request.setAttribute("employee_name", employee.getName());
         request.setAttribute("reports", reports);
         request.setAttribute("reports_count", reports_count);
         request.setAttribute("page", page);
-        request.setAttribute("follow_reports", follow_reports);
 
         if(request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
             request.getSession().removeAttribute("flush");
         }
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/follows/reports.jsp");
         rd.forward(request, response);
+
     }
 
 }
-

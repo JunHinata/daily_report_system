@@ -52,7 +52,10 @@
                 </table>
 
                 <c:if test="${sessionScope.login_employee.id == report.employee.id}">
-                    <p><a href="<c:url value="/reports/edit?id=${report.id}" />">この日報を編集する</a></p>
+                    <p><a href="<c:url value='/reports/edit?id=${report.id}' />">この日報を編集する</a></p>
+                </c:if>
+                <c:if test="${sessionScope.login_employee.id != report.employee.id}">
+                    <p><a href="<c:url value='/follows/create?id=${report.employee.id}' />">この日報の作成者をフォローする</a></p>
                 </c:if>
             </c:when>
             <c:otherwise>
@@ -60,6 +63,6 @@
             </c:otherwise>
         </c:choose>
 
-        <p><a href="<c:url value="/reports/index" />">一覧に戻る</a></p>
+        <p><a href="<c:url value="/reports/index" />">全日報一覧に戻る</a></p>
     </c:param>
 </c:import>
