@@ -35,7 +35,14 @@
                 <c:forEach var="follower" items="${followers}" varStatus="status">
                     <tr class="row${status.count % 2}">
                         <td class="follower_name"><c:out value="${follower.follow.name}" /></td>
-                        <td class="follower_action"><a href="<c:url value='/follows/create?id=${follower.follow.id}' />">フォローする</a></td>
+                        <c:choose>
+                            <c:when test="${mutual_list[status.count - 1] == 1}">
+                                <td class="follower_action">フォローしています</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td class="follower_action"><a href="<c:url value='/follows/create?id=${follower.follow.id}' />">フォローする</a></td>
+                            </c:otherwise>
+                        </c:choose>
                     </tr>
                 </c:forEach>
             </tbody>
